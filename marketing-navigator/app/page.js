@@ -3,108 +3,78 @@ import { useState } from 'react';
 
 export default function Page() {
   const [input, setInput] = useState('');
+  const [image, setImage] = useState(null);
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
   const [isHebrew, setIsHebrew] = useState(true);
 
   const t = {
-    he: {
-      title: "נווט השיווק", // הורדנו את ה-> וה- _
-      sub: "מערכת הארכיטקט לשליטה בחומר הלימוד.",
-      label: "מה תרצה לחקור היום?",
-      placeholder: "לדוגמה: הסבר על מודל 4P...",
-      btn: "הפעלת ניווט",
-      help: "?",
-      modalTitle: "ברוכים הבאים לארכיטקט",
-      modalBody: "כלי זה עוצב כדי לעזור לך להבין לעומק את עקרונות השיווק. המערכת מבוססת על ידע יזמי מתקדם. לקבלת התוצאות הטובות ביותר, נסחו שאלות ממוקדות וברורות.",
-      close: "התחל מסע"
-    },
-    en: {
-      title: "Marketing Navigator",
-      sub: "The Archetype system for mastering study material.",
-      label: "What would you like to explore?",
-      placeholder: "E.g., Explain the 4Ps model...",
-      btn: "Activate Navigation",
-      help: "?",
-      modalTitle: "Welcome to The Archetype",
-      modalBody: "This tool is crafted to help you deeply understand marketing principles base on advanced entrepreneurial knowledge. For best results, phrase focused and clear prompts.",
-      close: "Start Journey"
-    }
+    he: { title: "נווט השיווק", sub: "מערכת הארכיטקט", btn: "הפעלת ניווט", placeholder: "שאל כל דבר...", upload: "העלה צילום חומר", modalTitle: "ברוכים הבאים", modalBody: "השתמשו בכלי כדי לסכם חומר, לנתח תמונות מהמחברת ולתרגל למבחן.", close: "הבנתי, קדימה" },
+    en: { title: "Marketing Navigator", sub: "The Architect System", btn: "Activate Navigation", placeholder: "Ask anything...", upload: "Upload Photo", modalTitle: "Welcome", modalBody: "Use this tool to summarize material, analyze handwritten notes, and practice for exams.", close: "Let's Go" }
   };
 
   const curr = isHebrew ? t.he : t.en;
-  const toggleLang = () => setIsHebrew(!isHebrew);
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setImage(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleExecute = async () => {
-    if (!input) return;
     setLoading(true);
     setResponse('');
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input }),
+        body: JSON.stringify({ prompt: input, image }),
       });
       const data = await res.json();
       setResponse(data.message || data.error);
-    } catch (err) {
-      setResponse("שגיאת התחברות למערכת.");
-    }
+    } catch { setResponse("Error connecting to system."); }
     setLoading(false);
   };
 
   return (
     <div style={{ direction: isHebrew ? 'rtl' : 'ltr', width: '100%', display: 'flex', justifyContent: 'center' }}>
-      
-      {/* פופ-אפ מודרני */}
       {showPopup && (
         <div className="modal-overlay">
-          <div className="modal animate-pop-in">
-            <h2 style={{background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '2rem', margin: '0 0 20px 0'}}>{curr.modalTitle}</h2>
-            <p style={{lineHeight: '1.7', color: 'var(--text-secondary)', fontSize: '1.1rem'}}>{curr.modalBody}</p>
-            <button onClick={() => setShowPopup(false)} className="main-btn" style={{marginTop: '30px'}}>{curr.close}</button>
+          <div className="modal">
+            <h2 style={{background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{curr.modalTitle}</h2>
+            <p style={{color: '#94a3b8', lineHeight: '1.6'}}>{curr.modalBody}</p>
+            <button onClick={() => setShowPopup(false)} className="main-btn">{curr.close}</button>
           </div>
         </div>
       )}
 
       <div className="modern-card">
-        <div className="content">
-          
-          {/* כפתור שפה נקי */}
-          <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: '20px'}}>
-            <button onClick={toggleLang} style={{background: 'transparent', border: '1px solid var(--glass-border)', padding: '8px 16px', fontSize: '14px', color: 'var(--text-secondary)'}}>
-              {isHebrew ? 'EN' : 'עב'}
-            </button>
-          </div>
-
-          {/* כותרות מודרניות */}
-          <h1 style={{fontWeight: 800, fontSize: '2.5rem', margin: '0 0 10px 0', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
-            {curr.title}
-          </h1>
-          <p style={{color: 'var(--text-secondary)', fontSize: '1.2rem', marginTop: '0'}}>{curr.sub}</p>
-          
-          <div style={{marginTop: '40px'}}>
-            <label style={{fontSize: '1rem', color: 'var(--text-primary)', fontWeight: 600, display: 'block', marginBottom: '12px'}}>{curr.label}</label>
-            <input 
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={curr.placeholder}
-            />
-            <button onClick={handleExecute} disabled={loading} className="main-btn">
-              {loading ? (isHebrew ? 'מעבד נתונים...' : 'Processing...') : curr.btn}
-            </button>
-          </div>
-
-          {response && (
-            <div style={{marginTop: '30px', padding: '25px', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--glass-border)'}}>
-              <p style={{lineHeight: '1.8', color: 'var(--text-primary)', whiteSpace: 'pre-wrap', fontSize: '1.1rem'}}>{response}</p>
-            </div>
-          )}
+        <button onClick={() => setIsHebrew(!isHebrew)} style={{background: 'none', border: '1px solid var(--glass-border)', color: '#94a3b8', cursor: 'pointer', borderRadius: '8px', padding: '5px 10px', float: isHebrew ? 'left' : 'right'}}>{isHebrew ? 'EN' : 'עב'}</button>
+        <h1 style={{fontSize: '2.5rem', margin: '10px 0', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>{curr.title}</h1>
+        <p style={{color: '#94a3b8'}}>{curr.sub}</p>
+        
+        <input value={input} onChange={(e) => setInput(e.target.value)} placeholder={curr.placeholder} />
+        
+        <div style={{marginBottom: '15px'}}>
+          <input type="file" id="file" hidden onChange={handleFile} accept="image/*" />
+          <label htmlFor="file" style={{cursor: 'pointer', color: '#6366f1', fontSize: '14px'}}>📷 {curr.upload}</label>
+          {image && <span style={{fontSize: '12px', color: '#10b981', marginLeft: '10px'}}> ✓ Ready</span>}
         </div>
-      </div>
 
-      <button className="help-btn" onClick={() => setShowPopup(true)} title="Help">{curr.help}</button>
+        <button onClick={handleExecute} disabled={loading} className="main-btn">
+          {loading ? '...' : curr.btn}
+        </button>
+
+        {response && (
+          <div style={{marginTop: '30px', padding: '20px', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--glass-border)'}}>
+            <p style={{lineHeight: '1.8', whiteSpace: 'pre-wrap'}}>{response}</p>
+          </div>
+        )}
+      </div>
+      <button onClick={() => setShowPopup(true)} style={{position: 'fixed', bottom: '20px', right: '20px', borderRadius: '50%', width: '50px', height: '50px', background: 'var(--accent-gradient)', border: 'none', color: 'white', cursor: 'pointer', fontWeight: 'bold'}}>?</button>
     </div>
   );
 }
