@@ -40,7 +40,7 @@ export default function Page() {
       </div>
 
       <div className="content">
-        <h1 style={{color: '#3b82f6'}}>> Marketing Navigator_</h1>
+<h1 style={{color: '#3b82f6'}}>{">"} Marketing Navigator_</h1>
         <p style={{color: '#a0aec0', marginBottom: '20px'}}>Ready for commands. Knowledge base initialized.</p>
         
         <div style={{marginTop: '20px'}}>
