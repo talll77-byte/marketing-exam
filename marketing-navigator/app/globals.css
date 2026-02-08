@@ -1,6 +1,6 @@
 :root {
   --bg: #0b0f1a;
-  --card: #161b2b;
+  --card: rgba(22, 27, 43, 0.95); /* שקיפות קלה כדי לראות את הלוגו */
   --text: #e2e8f0;
   --accent: #3b82f6;
   --border: #2d3748;
@@ -8,6 +8,12 @@
 
 body {
   background-color: var(--bg);
+  /* הוספת לוגו הארכיטקט ברקע */
+  background-image: linear-gradient(rgba(11, 15, 26, 0.8), rgba(11, 15, 26, 0.8)), 
+                    url('https://i.ibb.co/Pv2h7Rtt/THE-ARCHETYPE-LOGO-copy.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--text);
   font-family: 'Fira Code', monospace;
   margin: 0;
@@ -15,43 +21,42 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 10px; /* ריווח לניידים */
 }
 
 .window {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
   max-width: 800px;
+  backdrop-filter: blur(10px); /* אפקט זכוכית */
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   overflow: hidden;
+  position: relative;
 }
 
-.title-bar {
-  background: #202637;
-  padding: 10px;
-  display: flex;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
+/* התאמה לניידים */
+@media (max-width: 600px) {
+  .content { padding: 15px !important; }
+  h1 { font-size: 1.2rem; }
 }
 
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.r { background: #ff5f56; } .y { background: #ffbd2e; } .g { background: #27c93f; }
-
-.content { padding: 30px; }
-
-input, button {
-  background: #0b0f1a;
-  border: 1px solid var(--border);
-  color: white;
-  padding: 12px;
-  border-radius: 5px;
-  width: 100%;
-  margin-top: 10px;
+/* עיצוב פופ-אפ (Modal) */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85); display: flex; align-items: center;
+  justify-content: center; z-index: 1000; padding: 20px;
+}
+.modal {
+  background: #1e293b; padding: 25px; border-radius: 12px;
+  max-width: 500px; border: 1px solid var(--accent);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
 }
 
-button {
-  background: var(--accent);
-  cursor: pointer;
-  font-weight: bold;
+.help-btn {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--accent); color: white; border: none;
+  border-radius: 50%; width: 50px; height: 50px;
+  cursor: pointer; font-weight: bold; font-size: 20px;
 }
