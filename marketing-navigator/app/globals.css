@@ -1,62 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 :root {
-  --bg: #0b0f1a;
-  --card: rgba(22, 27, 43, 0.95); /* שקיפות קלה כדי לראות את הלוגו */
-  --text: #e2e8f0;
-  --accent: #3b82f6;
-  --border: #2d3748;
+  --bg-deep: #0F111A;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
 }
 
 body {
-  background-color: var(--bg);
-  /* הוספת לוגו הארכיטקט ברקע */
-  background-image: linear-gradient(rgba(11, 15, 26, 0.8), rgba(11, 15, 26, 0.8)), 
+  background-color: var(--bg-deep);
+  background-image: linear-gradient(rgba(15, 17, 26, 0.85), rgba(15, 17, 26, 0.85)), 
                     url('https://i.ibb.co/Pv2h7Rtt/THE-ARCHETYPE-LOGO-copy.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  color: var(--text);
-  font-family: 'Fira Code', monospace;
+  color: white;
+  font-family: 'Inter', sans-serif;
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 10px; /* ריווח לניידים */
+  padding: 20px;
 }
 
-.window {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+.modern-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 800px;
-  backdrop-filter: blur(10px); /* אפקט זכוכית */
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  overflow: hidden;
-  position: relative;
+  max-width: 700px;
+  padding: 40px;
 }
 
-/* התאמה לניידים */
-@media (max-width: 600px) {
-  .content { padding: 15px !important; }
-  h1 { font-size: 1.2rem; }
+input, .main-btn, .file-label {
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  font-size: 16px;
 }
 
-/* עיצוב פופ-אפ (Modal) */
+input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  color: white;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.main-btn {
+  background: var(--accent-gradient);
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); }
+}
+
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.85); display: flex; align-items: center;
-  justify-content: center; z-index: 1000; padding: 20px;
-}
-.modal {
-  background: #1e293b; padding: 25px; border-radius: 12px;
-  max-width: 500px; border: 1px solid var(--accent);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+  background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
 
-.help-btn {
-  position: fixed; bottom: 20px; right: 20px;
-  background: var(--accent); color: white; border: none;
-  border-radius: 50%; width: 50px; height: 50px;
-  cursor: pointer; font-weight: bold; font-size: 20px;
+.modal {
+  background: #1e293b; padding: 40px; border-radius: 28px;
+  max-width: 500px; text-align: center; border: 1px solid var(--glass-border);
 }
