@@ -3,19 +3,19 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   try {
     const { prompt, image } = await req.json();
-    const apiKey = process.env.gemini_API_KEY; 
+    const apiKey = process.env.gemini_API_KEY; // השם שנתת בוורסל
 
     if (!apiKey) {
-      return NextResponse.json({ error: "Missing gemini_API_KEY in Vercel" }, { status: 500 });
+      return NextResponse.json({ error: "Missing API Key" }, { status: 500 });
     }
 
-    // שימוש בגרסה היציבה v1
+    // הכתובת המעודכנת והיציבה של Gemini
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
       contents: [{
         parts: [
-          { text: prompt },
+          { text: prompt || "סכם את החומר בתמונה" },
           ...(image ? [{ inline_data: { mime_type: "image/jpeg", data: image.split(',')[1] } }] : [])
         ]
       }]
