@@ -3,38 +3,40 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   try {
     const { prompt, image } = await req.json();
-    const apiKey = process.env.OPENAI_API_KEY;
+    
+    // כאן אנחנו משתמשים בדיוק בשם שנתת בוורסל
+    const apiKey = process.env.gemini_API_KEY; 
 
     if (!apiKey) {
-      return NextResponse.json({ error: "Missing API Key in Vercel" }, { status: 500 });
+      return NextResponse.json({ error: "Missing gemini_API_KEY in Vercel" }, { status: 500 });
     }
 
-    const userContent = [{ type: "text", text: prompt }];
-    if (image) {
-      userContent.push({ type: "image_url", image_url: { url: image } });
-    }
+    // פנייה ישירה ל-API של Gemini (Google AI)
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o", // תמיכה במולטי-מודאליות
-        messages: [
-          { 
-            role: "system", 
-            content: "You are The Architect's Marketing Expert. Analyze inputs and images to provide concise, exam-focused answers." 
-          },
-          { role: "user", content: userContent }
+    const payload = {
+      contents: [{
+        parts: [
+          { text: prompt },
+          ...(image ? [{ inline_data: { mime_type: "image/jpeg", data: image.split(',')[1] } }] : [])
         ]
-      })
+      }]
+    };
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
-    return NextResponse.json({ success: true, message: data.choices[0].message.content });
+    
+    if (data.error) throw new Error(data.error.message);
+
+    const aiResponse = data.candidates[0].content.parts[0].text;
+    return NextResponse.json({ success: true, message: aiResponse });
+
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "System Error: " + error.message }, { status: 500 });
   }
 }
