@@ -9,7 +9,7 @@ export default function Page() {
   const handleExecute = async () => {
     if (!input) return;
     setLoading(true);
-    setResponse(''); // ניקוי תשובה קודמת
+    setResponse('');
     
     try {
       const res = await fetch('/api/generate', {
@@ -23,10 +23,10 @@ export default function Page() {
       if (data.success) {
         setResponse(data.message);
       } else {
-        setResponse("ERROR: " + (data.error || "Unknown system failure"));
+        setResponse("ERROR: " + (data.error || "System failure"));
       }
     } catch (err) {
-      setResponse("CRITICAL ERROR: Connection to Architect-Mainframe lost.");
+      setResponse("CRITICAL ERROR: Connection lost.");
     } finally {
       setLoading(false);
     }
@@ -40,26 +40,27 @@ export default function Page() {
       </div>
 
       <div className="content">
-<h1 style={{color: '#3b82f6'}}>{">"} Marketing Navigator_</h1>
+        {/* תיקון השגיאה: שימוש ב-&gt; במקום סימן גדול-מ חשוף */}
+        <h1 style={{color: '#3b82f6'}}>&gt; Marketing Navigator_</h1>
         <p style={{color: '#a0aec0', marginBottom: '20px'}}>Ready for commands. Knowledge base initialized.</p>
         
         <div style={{marginTop: '20px'}}>
-          <label style={{fontSize: '12px', color: '#4fd1c5'}}>PROMPT_INPUT:</label>
+          <label style={{fontSize: '12px', color: '#4fd1c5', display: 'block', marginBottom: '8px'}}>PROMPT_INPUT:</label>
           <input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleExecute()}
-            placeholder="Ask about Marketing vs Selling, Supply & Demand..." 
+            onKeyDown={(e) => e.key === 'Enter' && handleExecute()}
+            placeholder="Type your command..." 
           />
           <button onClick={handleExecute} disabled={loading || !input}>
-            {loading ? 'EXECUTING... [7%]' : 'RUN COMMAND'}
+            {loading ? 'EXECUTING...' : 'RUN COMMAND'}
           </button>
         </div>
 
         {response && (
           <div style={{marginTop: '25px', padding: '15px', background: '#0f172a', border: '1px solid #334155', borderRadius: '4px'}}>
             <p style={{color: '#4fd1c5', margin: '0 0 10px 0'}}>// SYSTEM_OUTPUT:</p>
-            <p style={{lineHeight: '1.6', color: '#f8fafc'}}>{response}</p>
+            <p style={{lineHeight: '1.6', color: '#f8fafc', whiteSpace: 'pre-wrap'}}>{response}</p>
           </div>
         )}
 
