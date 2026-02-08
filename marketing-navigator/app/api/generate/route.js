@@ -5,17 +5,17 @@ export async function POST(req) {
     const { prompt, image } = await req.json();
     const apiKey = process.env.gemini_API_KEY; 
 
-    if (!apiKey) {
-      return NextResponse.json({ error: "Missing gemini_API_KEY in Vercel" }, { status: 500 });
+    if (!apiKey || apiKey.startsWith('gen-lang')) {
+      return NextResponse.json({ error: "Invalid API Key format. Use the AIza... key." }, { status: 500 });
     }
 
-    // כתובת ה-API הרשמית לגרסה היציבה ביותר
+    // כתובת יציבה לביצוע שאילתות
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
       contents: [{
         parts: [
-          { text: prompt || "Analyze this material and provide a summary for a marketing exam." },
+          { text: prompt || "Analyze this marketing material." },
           ...(image ? [{ inline_data: { mime_type: "image/jpeg", data: image.split(',')[1] } }] : [])
         ]
       }]
@@ -30,11 +30,7 @@ export async function POST(req) {
     const data = await response.json();
     
     if (data.error) {
-      return NextResponse.json({ error: "Google AI Error: " + data.error.message }, { status: 500 });
-    }
-
-    if (!data.candidates || data.candidates.length === 0) {
-      return NextResponse.json({ error: "No response from AI." }, { status: 500 });
+      return NextResponse.json({ error: "Google API Error: " + data.error.message }, { status: 500 });
     }
 
     const aiResponse = data.candidates[0].content.parts[0].text;
