@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generativeai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const KNOWLEDGE_BASE = `
+const KNOWLEDGE_BASE = 
 CONTEXT: Foundations of Marketing & Entrepreneurship.
 CORE DATA:
 - Marketing vs Selling: Marketing focuses on customer needs; Selling focuses on the product/cash.
