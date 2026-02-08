@@ -17,22 +17,22 @@ export default function Page() {
       placeholder: "שאל כל דבר על חומר המבחן...", 
       upload: "העלה צילום חומר", 
       modalTitle: "המעוז הדיגיטלי טלי יא יא",
-      modalIntro: "ברוכים הבאים לחבר הלימוד האישי שלכם למבחן בשיווק.",
-      modalCapabilities: "יכולות המערכת: ניתוח מושגי יסוד, פתרון שאלות ממבחני עבר, וסריקת סיכומים מצולמים מהמחברת.",
-      modalUsage: "איך עובדים? הקלידו שאלה בתיבת הטקסט או העלו צילום של חומר לימוד. המערכת תנתח את המידע ותפיק עבורכם הסבר ממוקד למבחן.",
-      close: "יאללה, בוא נצליח במבחן!"
+      modalIntro: "הכלי הוא עוזר לימודי אינטליגנטי המותאם אישית למבחן בשיווק.",
+      modalCapabilities: "הוא יודע לנתח מושגים, לסכם חומר מורכב, ולסרוק צילומי מחברת בזמן אמת.",
+      modalUsage: "איך לעבוד? הקלידו שאלה או העלו תמונה של החומר. המערכת תבנה עבורכם תשובה מנצחת למבחן.",
+      close: "הבנתי, בוא ננצח את המבחן!"
     },
     en: { 
-      title: "The Digital Stronghold", 
+      title: "Digital Stronghold", 
       sub: "Marketing Exam Study Buddy", 
-      btn: "Activate Navigation", 
-      placeholder: "Ask anything about the material...", 
+      btn: "Start Navigation", 
+      placeholder: "Ask anything...", 
       upload: "Upload Photo", 
       modalTitle: "The Digital Stronghold",
-      modalIntro: "Welcome to your personal marketing exam companion.",
-      modalCapabilities: "Capabilities: Concept analysis, exam question solving, and OCR scanning of handwritten notes.",
-      modalUsage: "How to use? Enter a query or upload a photo of your material. The system will analyze the data and provide focused exam insights.",
-      close: "Let's Get Started" 
+      modalIntro: "This is an AI study companion tailored for your marketing exam.",
+      modalCapabilities: "It can analyze concepts, summarize topics, and scan handwritten notes.",
+      modalUsage: "Enter a prompt or upload a photo. The system will generate focused exam insights.",
+      close: "Let's Go!" 
     }
   };
 
@@ -59,7 +59,7 @@ export default function Page() {
       });
       const data = await res.json();
       setResponse(data.message || data.error);
-    } catch { setResponse("שגיאה בחיבור למערכת הארכיטקט."); }
+    } catch { setResponse("שגיאה בחיבור למעוז הדיגיטלי."); }
     setLoading(false);
   };
 
@@ -74,9 +74,10 @@ export default function Page() {
               {curr.modalTitle}
             </h2>
             <div style={{textAlign: isHebrew ? 'right' : 'left', color: '#94a3b8', lineHeight: '1.6'}}>
-               <p><strong>מה זה הכלי?</strong> {curr.modalIntro}</p>
-               <p><strong>מהן היכולות?</strong> {curr.modalCapabilities}</p>
-               <p><strong>איך עובדים?</strong> {curr.modalUsage}</p>
+               <p><strong>1. מה זה הכלי?</strong> {curr.modalIntro}</p>
+               <p><strong>2. מהן היכולות?</strong> {curr.modalCapabilities}</p>
+               <p><strong>3. איך לעבוד איתו?</strong> {curr.modalUsage}</p>
+               <p><strong>4. שם מלא:</strong> המעוז הדיגיטלי טלי יא יא (חבר לימוד למבחן שיווק)</p>
             </div>
             <button onClick={() => setShowPopup(false)} className="main-btn" style={{marginTop: '25px'}}>
               {curr.close}
@@ -87,9 +88,9 @@ export default function Page() {
 
       <div className="modern-card">
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <p style={{color: '#94a3b8', fontSize: '12px', margin: 0}}>{isHebrew ? 'סטטוס: פעיל' : 'STATUS: ONLINE'}</p>
+          <p style={{color: '#94a3b8', fontSize: '12px', margin: 0}}>{isHebrew ? 'סטטוס: מחובר' : 'STATUS: ONLINE'}</p>
           <button onClick={() => setIsHebrew(!isHebrew)} style={{background: 'none', border: '1px solid var(--glass-border)', color: '#94a3b8', cursor: 'pointer', borderRadius: '8px', padding: '5px 12px'}}>
-            {isHebrew ? 'Switch to EN' : 'עבור לעברית'}
+            {isHebrew ? 'EN' : 'עב'}
           </button>
         </div>
 
@@ -109,29 +110,22 @@ export default function Page() {
           <label htmlFor="file" style={{cursor: 'pointer', color: '#6366f1', fontSize: '14px', fontWeight: '600'}}>
             📷 {curr.upload}
           </label>
-          {image && <span style={{fontSize: '12px', color: '#10b981'}}>✓ {isHebrew ? 'הקובץ מוכן' : 'Ready'}</span>}
+          {image && <span style={{fontSize: '12px', color: '#10b981'}}>✓ מוכן לניתוח</span>}
         </div>
 
         <button onClick={handleExecute} disabled={loading} className="main-btn">
-          {loading ? (isHebrew ? 'מעבד נתונים...' : 'Processing...') : curr.btn}
+          {loading ? 'מנתח נתונים...' : curr.btn}
         </button>
 
         {response && (
           <div style={{marginTop: '30px', padding: '20px', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--glass-border)'}}>
-            <p style={{color: '#4fd1c5', fontSize: '12px', margin: '0 0 10px 0'}}>// SYSTEM_RESPONSE:</p>
+            <p style={{color: '#4fd1c5', fontSize: '12px', margin: '0 0 10px 0'}}>// SYSTEM_OUTPUT:</p>
             <p style={{lineHeight: '1.8', whiteSpace: 'pre-wrap', color: '#f8fafc'}}>{response}</p>
           </div>
         )}
       </div>
 
-      {/* כפתור עזרה צף */}
-      <button 
-        className="help-btn" 
-        onClick={() => setShowPopup(true)} 
-        style={{position: 'fixed', bottom: '30px', right: '30px', borderRadius: '50%', width: '60px', height: '60px', background: 'var(--accent-gradient)', border: 'none', color: 'white', cursor: 'pointer', fontWeight: 'bold', fontSize: '24px', boxShadow: '0 10px 30px rgba(99, 102, 241, 0.4)'}}
-      >
-        ?
-      </button>
+      <button className="help-btn" onClick={() => setShowPopup(true)}>?</button>
     </div>
   );
 }
