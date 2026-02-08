@@ -12,7 +12,7 @@ export default function Page() {
   const t = {
     he: { 
       title: "המעוז הדיגיטלי טלי יא יא", sub: "חבר לימוד למבחן שיווק", btn: "הפעלת ניווט", placeholder: "שאל כל דבר...", upload: "העלה צילום חומר",
-      modalTitle: "המעוז הדיגיטלי טלי יא יא",
+      modalTitle: "המעוז הדיגיטלי",
       q1: "מה זה הכלי?", a1: "חבר לימוד אינטליגנטי המותאם אישית למבחני שיווק ויזמות.",
       q2: "יכולות המערכת:", a2: "ניתוח מושגים, סיכום חומר מורכב, וזיהוי טקסט מצילום מחברות/מצגות.",
       q3: "איך לעבוד איתו?", a3: "הקלידו שאלה או העלו תמונה. המערכת תנתח את המידע ותספק תשובה ממוקדת למבחן.",
@@ -55,13 +55,13 @@ export default function Page() {
   };
 
   return (
-    <div style={{ direction: isHebrew ? 'rtl' : 'ltr', width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ direction: isHebrew ? 'rtl' : 'ltr' }}>
       
       {showPopup && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2 style={{background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: '1.8rem', marginBottom: '20px'}}>{curr.modalTitle}</h2>
-            <div style={{textAlign: isHebrew ? 'right' : 'left', color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem'}}>
+            <h2 className="modal-title-gradient">{curr.modalTitle}</h2>
+            <div className="modal-content" style={{textAlign: isHebrew ? 'right' : 'left'}}>
                <p><strong>1. {curr.q1}</strong> {curr.a1}</p>
                <p><strong>2. {curr.q2}</strong> {curr.a2}</p>
                <p><strong>3. {curr.q3}</strong> {curr.a3}</p>
@@ -73,19 +73,19 @@ export default function Page() {
 
       <div className="modern-card">
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <p style={{color: '#94a3b8', fontSize: '11px', margin: 0}}>{isHebrew ? 'סטטוס: פעיל' : 'STATUS: ONLINE'}</p>
-          <button onClick={() => setIsHebrew(!isHebrew)} style={{background: 'none', border: '1px solid var(--glass-border)', color: '#94a3b8', cursor: 'pointer', borderRadius: '8px', padding: '4px 10px'}}>{isHebrew ? 'EN' : 'עב'}</button>
+          <p className="status-tag">{isHebrew ? 'סטטוס: פעיל' : 'STATUS: ONLINE'}</p>
+          <button onClick={() => setIsHebrew(!isHebrew)} className="lang-toggle">{isHebrew ? 'EN' : 'עב'}</button>
         </div>
 
-        <h1 style={{fontSize: '2.2rem', margin: '20px 0 5px 0', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: '800'}}>{curr.title}</h1>
-        <p style={{color: '#94a3b8', fontSize: '1.1rem', marginTop: 0, marginBottom: '30px'}}>{curr.sub}</p>
+        <h1 className="hero-title">{curr.title}</h1>
+        <p className="hero-subtitle">{curr.sub}</p>
         
         <input value={input} onChange={(e) => setInput(e.target.value)} placeholder={curr.placeholder} />
         
         <div style={{marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px'}}>
           <input type="file" id="file" hidden onChange={handleFile} accept="image/*" />
-          <label htmlFor="file" style={{cursor: 'pointer', color: '#6366f1', fontSize: '14px'}}>📷 {curr.upload}</label>
-          {image && <span style={{fontSize: '12px', color: '#10b981'}}>✓ מוכן</span>}
+          <label htmlFor="file" className="file-label">📷 {curr.upload}</label>
+          {image && <span className="ready-tag">✓ מוכן</span>}
         </div>
 
         <button onClick={handleExecute} disabled={loading} className="main-btn">
@@ -93,8 +93,8 @@ export default function Page() {
         </button>
 
         {response && (
-          <div style={{marginTop: '30px', padding: '20px', background: 'rgba(0,0,0,0.2)', borderRadius: '16px', border: '1px solid var(--glass-border)'}}>
-            <p style={{lineHeight: '1.8', whiteSpace: 'pre-wrap', color: '#f8fafc'}}>{response}</p>
+          <div className="response-container">
+            <p className="response-text">{response}</p>
           </div>
         )}
       </div>
