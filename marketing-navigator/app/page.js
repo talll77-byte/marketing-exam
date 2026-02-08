@@ -1,39 +1,28 @@
-"use client";
-import { useState } from 'react';
-
-export default function Home() {
-  const [desc, setDesc] = useState("");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleGenerate = async () => {
-    setLoading(true);
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      body: JSON.stringify({ businessDescription: desc }),
-    });
-    const data = await res.json();
-    setResult(data.html);
-    setLoading(false);
-  };
-
+export default function Page() {
   return (
-    <div style={{ padding: '50px', fontFamily: 'sans-serif', textAlign: 'right' }} dir="rtl">
-      <h1>The Architect: Marketing Exam Navigator</h1>
-      <textarea 
-        value={desc} 
-        onChange={(e) => setDesc(e.target.value)}
-        placeholder="תאר את העסק שלך כאן..."
-        style={{ width: '100%', height: '150px', padding: '10px', fontSize: '16px' }}
-      />
-      <button 
-        onClick={handleGenerate} 
-        disabled={loading}
-        style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer', background: '#e67e22', color: 'white', border: 'none', borderRadius: '5px' }}
-      >
-        {loading ? "מעבד נתונים..." : "ייצר תוכנית למידה מותאמת"}
-      </button>
-      <div style={{ marginTop: '40px' }} dangerouslySetInnerHTML={{ __html: result }} />
+    <div className="window">
+      {/* סרגל macOS */}
+      <div className="title-bar">
+        <div className="dot r"></div>
+        <div className="dot y"></div>
+        <div className="dot g"></div>
+        <span style={{fontSize: '12px', color: '#718096', marginLeft: '10px'}}>architect_terminal.exe</span>
+      </div>
+
+      <div className="content">
+        <h1 style={{color: '#3b82f6'}}>> Marketing Navigator_</h1>
+        <p style={{color: '#a0aec0'}}>System ready. Knowledge base loaded.</p>
+        
+        <div style={{marginTop: '40px'}}>
+          <label>ENTER COMMAND / PROMPT:</label>
+          <input type="text" placeholder="Type your marketing question..." />
+          <button>EXECUTE</button>
+        </div>
+
+        <div style={{marginTop: '30px', fontSize: '14px', color: '#4fd1c5'}}>
+          // Connection Status: Secure
+        </div>
+      </div>
     </div>
   );
 }
